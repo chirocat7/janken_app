@@ -1,0 +1,146 @@
+<!--
+==============================
+じゃんけんアプリ作成手順書
+==============================
+1. HTMLの準備
+  - 3つのボタン（グー・チョキ・パー）と結果表示エリアを用意する。
+2. JavaScriptで要素を取得
+  - getElementByIdで各ボタンと結果表示エリアを取得。
+3. じゃんけんの手を配列で用意
+  - 例：const hands = ['グー', 'チョキ', 'パー'];
+4. ボタンのクリックイベントを設定
+  - 各ボタンが押されたとき、ユーザーの手を決定し、ゲームを実行する関数を呼び出す。
+5. ゲーム実行関数を作成
+  - コンピュータの手をランダムで決定し、勝敗判定関数を呼び出し、結果を表示。
+6. 勝敗判定関数を作成
+  - ユーザーとコンピュータの手をインデックス（数値）に変換し、条件で判定。
+7. 結果を画面に表示
+  - 勝敗判定の結果をdivなどに表示する。
+8. 必要に応じて追加機能
+  - 画像表示、スコアカウント、リセットボタン、デザイン調整など。
+==============================
+-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>じゃんけんアプリ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="container">
+  <h1>じゃんけんアプリ</h1>
+  <p>ボタンをクリックして、じゃんけんをしましょう！</p>
+<div id="janken">
+    <button id="rock">グー<img src="img/rock.png"></button>
+    <button id="scissors">チョキ<img src="img/scissors.png"></button>
+    <button id="paper">パー<img src="img/paper.png"></button>
+  </div>
+<div id="resultarea">
+  <div id="userhand"></div>
+  <div id="computerhand"></div>
+</div>
+  <div id="result"></div>
+  <div id="score">
+    <p>勝ち：<span id="win"></span></p>
+    <p>負け：<span id="lose"></span></p>
+    <p>引き分け：<span id="draw"></span></p>
+</div>
+</div>
+</body>
+<script>
+  const rockButton = document.getElementById('rock');
+  const scissorsButton = document.getElementById('scissors');
+  const paperButton = document.getElementById('paper');
+  const userHandDiv = document.getElementById('userhand');
+  const computerHandDiv = document.getElementById('computerhand');
+  const resultDiv = document.getElementById('result');
+  const hands = ['グー', 'チョキ', 'パー'];
+  const scoreDiv = document.getElementById('score');
+
+  let winScore = 0;
+  let loseScore = 0;
+  let drawScore = 0;
+
+  scoreDiv.style.display = 'none';
+
+  // ボタンがクリックされたときの処理
+  rockButton.addEventListener('click' , function() {
+    alert('あなたはグーを選択しました');
+    // ユーザーの手を設定
+    const userHand = 'グー';
+    userHandDiv.textContent = 'あなたの手：' + userHand;
+    // playGame関数を呼び出す
+    playGame(userHand);
+  });
+  scissorsButton.addEventListener('click' , function() {
+    alert('あなたはチョキを選択しました');
+     const userHand = 'チョキ';
+      userHandDiv.textContent = 'あなたの手：' + userHand;
+     playGame(userHand);
+  });
+  paperButton.addEventListener('click' , () => {
+    alert('あなたはパーを選択しました');
+    const userHand = 'パー';
+    userHandDiv.textContent = 'あなたの手：' + userHand;
+  playGame(userHand);
+  });
+
+  // じゃんけんを実行するすべての関数
+function playGame(userHand) {
+  // コンピュータの手をランダムに選択
+  const randomIndex = Math.floor(Math.random() * 3);
+  const computerHands = hands[randomIndex];
+  console.log(userHand);
+  console.log(computerHands);
+  alert('コンピュータは' + computerHands + 'を選択しました');
+  computerHandDiv.textContent = 'コンピュータの手：' + computerHands;
+  const result = judge(userHand, computerHands);
+  console.log(result);
+  resultDiv.textContent = result;
+  scoreDiv.style.display = 'flex';
+}
+
+// 勝敗を判定する関数
+function judge(userHand, computerHands) {
+
+//indexOfでhandsの文字列をインデックス（数値）に変換
+//userHandはグーなので、handsに格納されているインデックスは(0)というのをuserIndexとして定義してる
+const userIndex = hands.indexOf(userHand);
+console.log(userIndex);
+const computerIndex = hands.indexOf(computerHands);
+console.log(computerIndex);
+let resultMessage = ""; // 結果メッセージを格納する変数を用意
+
+  //あいこの場合
+  if (userIndex === computerIndex) {
+    drawScore++;
+    resultMessage = "引き分けです😐";
+  }
+
+  else if (
+    //あなたが勝つ場合 (差が-1、2なら勝ち)
+    //例：あなた(グー(0))、CP(チョキ(1)) => 差が-1
+    //例：あなた(チョキ(1))、CP(パー(2)) = 差が-1
+    //例：あなた(パー(2))、 CP(グー(0)) =差が2
+    (userIndex + 3 - computerIndex) % 3 === 2) {
+      winScore++;
+      resultMessage = "あなたの勝ち!!🏆🎉";
+    }
+
+ else {
+
+    // それ以外で指定してる (あなたが負ける場合 => 差が2、-1なら負け)
+    loseScore++;
+      resultMessage = "あなたの負けです...😭";
+  }
+    document.getElementById('draw').textContent = drawScore;
+    document.getElementById('win').textContent = winScore;
+    document.getElementById('lose').textContent = loseScore;
+
+    return resultMessage;
+
+}
+</script>
+</html>
