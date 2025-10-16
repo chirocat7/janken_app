@@ -1,25 +1,3 @@
-<!--
-==============================
-じゃんけんアプリ作成手順書
-==============================
-1. HTMLの準備
-  - 3つのボタン（グー・チョキ・パー）と結果表示エリアを用意する。
-2. JavaScriptで要素を取得
-  - getElementByIdで各ボタンと結果表示エリアを取得。
-3. じゃんけんの手を配列で用意
-  - 例：const hands = ['グー', 'チョキ', 'パー'];
-4. ボタンのクリックイベントを設定
-  - 各ボタンが押されたとき、ユーザーの手を決定し、ゲームを実行する関数を呼び出す。
-5. ゲーム実行関数を作成
-  - コンピュータの手をランダムで決定し、勝敗判定関数を呼び出し、結果を表示。
-6. 勝敗判定関数を作成
-  - ユーザーとコンピュータの手をインデックス（数値）に変換し、条件で判定。
-7. 結果を画面に表示
-  - 勝敗判定の結果をdivなどに表示する。
-8. 必要に応じて追加機能
-  - 画像表示、スコアカウント、リセットボタン、デザイン調整など。
-==============================
--->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -51,15 +29,18 @@
 <footer></footer>
 </body>
 <script>
+  //JavaScriptで要素を取得、getElementByIdで各ボタンと結果表示エリアを取得。
   const rockButton = document.getElementById('rock');
   const scissorsButton = document.getElementById('scissors');
   const paperButton = document.getElementById('paper');
   const userHandDiv = document.getElementById('userhand');
   const computerHandDiv = document.getElementById('computerhand');
   const resultDiv = document.getElementById('result');
+  //じゃんけんの手を配列で用意
   const hands = ['グー', 'チョキ', 'パー'];
   const scoreDiv = document.getElementById('score');
 
+  //スコアの変数を格納、初期化
   let winScore = 0;
   let loseScore = 0;
   let drawScore = 0;
@@ -107,12 +88,12 @@ function playGame(userHand) {
 function judge(userHand, computerHands) {
 
 //indexOfでhandsの文字列をインデックス（数値）に変換
-//userHandはグーなので、handsに格納されているインデックスは(0)というのをuserIndexとして定義してる
 const userIndex = hands.indexOf(userHand);
 console.log(userIndex);
 const computerIndex = hands.indexOf(computerHands);
 console.log(computerIndex);
-let resultMessage = ""; // 結果メッセージを格納する変数を用意
+ // 結果メッセージを格納する変数を用意
+let resultMessage = "";
 
   //あいこの場合
   if (userIndex === computerIndex) {
@@ -132,7 +113,7 @@ let resultMessage = ""; // 結果メッセージを格納する変数を用意
 
  else {
 
-    // それ以外で指定してる (あなたが負ける場合 => 差が2、-1なら負け)
+    // それ以外 (あなたが負ける場合 => 差が2、-1なら負け)
     loseScore++;
       resultMessage = "あなたの負けです...😭";
   }
@@ -140,8 +121,10 @@ let resultMessage = ""; // 結果メッセージを格納する変数を用意
     document.getElementById('win').textContent = winScore;
     document.getElementById('lose').textContent = loseScore;
 
+  //結果を返す
     return resultMessage;
 
 }
 </script>
+
 </html>
